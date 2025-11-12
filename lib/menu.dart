@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:league_locker/widgets/left_drawer.dart';
+import 'package:league_locker/itemlist_form.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -26,6 +28,7 @@ class MyHomePage extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
+      drawer: LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -139,6 +142,14 @@ class ItemCard extends StatelessWidget {
             ..showSnackBar(
               SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
             );
+
+          // Navigate ke route yang sesuai (tergantung jenis tombol)
+          if (item.name == "Create Product") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ItemFormPage()),
+            );
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(8),
