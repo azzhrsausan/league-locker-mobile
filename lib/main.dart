@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:league_locker/menu.dart';
+import 'package:league_locker/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());

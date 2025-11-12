@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:league_locker/menu.dart';
-import 'package:league_locker/itemlist_form.dart';
+import 'package:league_locker/screens/menu.dart';
+import 'package:league_locker/screens/itemlist_form.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
