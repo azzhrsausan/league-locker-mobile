@@ -49,3 +49,51 @@ menyesuaikan diri berdasarkan aturan dari parent-nya.
 3. Kalau bikin form, aku pakai Padding, SingleChildScrollView, dan ListView biar tampilannya enak dilihat dan nggak bikin capek mata. Padding ngasih jarak di tiap field supaya nggak terlalu dempet, SingleChildScrollView bantu kalau layar kecil atau pas keyboard muncul biar form-nya tetap bisa digulir, dan ListView dipakai kalau field-nya banyak biar scroll-nya lebih smooth. Contohnya di form tambah produk, field kayak nama, harga, dan deskripsi aku bungkus pake Padding, terus semuanya dimasukin ke ListView biar tetap bisa discroll dengan nyaman.
 
 4. Biar aplikasi Football Shop punya warna yang konsisten sama identitas brand-nya, aku ngatur tema lewat ThemeData. Aku pakai ColorScheme.fromSeed dengan warna utama brand, terus warna itu dipakai buat AppBar, DrawerHeader, tombol, dan ikon. Jadi semua bagian kelihatan nyatu dan seragam tanpa perlu ubah warna satu-satu. Hasilnya, tampilannya lebih profesional dan punya ciri khas sendiri.
+
+
+
+
+
+
+#  Tugas 9
+
+1. Kita bikin model Dart supaya data dari JSON lebih rapi dan aman. Dengan model, tiap field punya tipe yang jelas, jadi kalau ada data yang null atau salah tipe, cepat ketahuan. Kalau cuma pakai Map<String, dynamic>, kita harus nebak-nebak tipe sendiri dan rawan typo atau error waktu jalan. Model itu intinya biar kode lebih gampang dirawat dan dibaca.
+
+2. Package http dipakai buat kirim request sederhana, misalnya GET/POST tanpa mikirin cookie. Sedangkan CookieRequest dipakai kalau kita butuh session login, karena dia otomatis nyimpen dan ngirim cookie ke server. Jadi http itu basic request, sementara CookieRequest itu request yang “ingat” sesi login kita.
+
+3. Satu instance CookieRequest harus dibagi ke semua halaman biar session-nya sama. Kalau tiap halaman bikin instance baru, cookie-nya nggak ikut, jadi app bisa “lupa” kalau user sudah login. Dengan satu instance, semua request tetap dalam keadaan login.
+
+4. Flutter butuh konfigurasi biar bisa ngobrol sama Django. 10.0.2.2 harus ditambah ke ALLOWED_HOSTS karena emulator Android pakai alamat itu buat akses localhost. CORS dan pengaturan cookie perlu diaktifkan supaya Django nggak nge-blok request dari Flutter. Di Android juga harus kasih izin internet. Kalau salah satu nggak diatur, request bisa gagal, login nggak nyantol, atau Flutter nggak bisa connect sama server sama sekali.
+
+5. Alur pengiriman  data: user isi form → Flutter kirim data ke Django → Django proses dan balas JSON → Flutter parse JSON itu ke model → data ditampilin di UI. Jadi datanya muter bolak-balik antara Flutter dan Django lewat request-response.
+
+6. Mekanisme autentikasi: waktu register/login, Flutter kirim data akun ke Django. Kalau benar, Django bikin session dan ngasih cookie, lalu CookieRequest nyimpen cookie itu. Selama cookie masih ada, user dianggap login. Logout itu tinggal hapus session di Django dan hapus cookie di Flutter. Setelah itu UI balik ke kondisi belum login.
+
+7. Di Django, aku ubah model jadi pakai field produk sendiri
+   name, price, description, category, thumbnail, is_featured, user.
+   Lalu aku buat view JSON dan url /json/ buat ngirim semua data produk ke Flutter.
+
+Masih di Django, aku ubah fungsi create_news_flutter jadi create_item_flutter
+Field yang dibaca dari request.body aku ganti ke name, price, description, category, thumbnail, is_featured.
+Fungsi itu bikin objek produk baru dan balikin JSON {"status": "success"}.
+
+Di Flutter, aku bikin model ItemEntry
+Isinya disesuaikan sama JSON dari Django dan aku buat helper itemEntryFromJson buat parse list produk.
+
+Aku buat halaman list ItemEntryListPage
+Di situ aku pakai CookieRequest.get ke endpoint /json/, ubah tiap elemen respons jadi ItemEntry, lalu tampilin dengan FutureBuilder dan ListView.builder.
+
+Aku bikin widget kartu ItemEntryCard
+Kartu ini nampilin thumbnail, nama produk, kategori, harga, dan sedikit deskripsi.
+Kalau isFeatured true, aku kasih label “Featured product”.
+
+Aku bikin halaman detail ItemDetailPage
+Saat user tap kartu, aku Navigator.push ke halaman ini dan nampilin info produk lengkap.
+
+Aku sambungkan semua ke menu dan form Flutter
+Di drawer dan menu utama aku tambah tombol ke Product List dan Create Product.
+Di form ItemListFormPage, saat submit aku kirim data produk ke endpoint create_item_flutter pakai postJson, lalu kalau sukses balik ke home dan munculin SnackBar.
+
+
+
+

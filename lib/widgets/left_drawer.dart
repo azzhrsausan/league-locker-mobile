@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:league_locker/screens/menu.dart';
 import 'package:league_locker/screens/itemlist_form.dart';
+import 'package:league_locker/screens/item_entry_list.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -55,7 +56,19 @@ class LeftDrawer extends StatelessWidget {
             // Bagian redirection ke NewsFormPage
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ItemFormPage()));
+                  MaterialPageRoute(builder: (context) => const ItemListFormPage()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_bag),
+            title: const Text('Product List'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ItemEntryListPage(),
+                ),
+              );
             },
           ),
         ],
