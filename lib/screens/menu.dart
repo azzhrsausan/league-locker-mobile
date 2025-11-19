@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:league_locker/widgets/left_drawer.dart';
-import 'package:league_locker/screens/itemlist_form.dart';
 import 'package:league_locker/widgets/item_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
 
-  final String nama = "Sausan Farah Azzahra"; // nama
-  final String npm = "2406439091"; // npm
-  final String kelas = "D"; // kelas
+  final String nama = "Sausan Farah Azzahra";
+  final String npm = "2406439091";
+  final String kelas = "D";
 
   final List<ItemHomepage> items = [
     ItemHomepage("All Products", Icons.shopping_cart),
     ItemHomepage("My Products", Icons.shopping_basket),
     ItemHomepage("Create Product", Icons.add),
+    ItemHomepage("Logout", Icons.logout),
   ];
 
   @override

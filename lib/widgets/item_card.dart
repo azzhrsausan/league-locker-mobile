@@ -5,6 +5,7 @@ import 'package:league_locker/screens/item_entry_list.dart';
 import 'package:league_locker/screens/login.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:league_locker/screens/my_item_entry_list.dart';
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
@@ -14,15 +15,16 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
-    // Menentukan warna berbeda untuk setiap tombol
-    Color backgroundColor;
 
+    Color backgroundColor;
     if (item.name == "All Products") {
-      backgroundColor = Colors.blue; // Warna biru
+      backgroundColor = Colors.blue;
     } else if (item.name == "My Products") {
-      backgroundColor = Colors.green; // Warna hijau
+      backgroundColor = Colors.green;
     } else if (item.name == "Create Product") {
-      backgroundColor = Colors.red; // Warna merah
+      backgroundColor = Colors.red;
+    } else if (item.name == "Logout") {
+      backgroundColor = Colors.grey;
     } else {
       backgroundColor = Theme.of(context).colorScheme.secondary;
     }
@@ -35,43 +37,50 @@ class ItemCard extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
+              SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!"),
+              ),
             );
 
-          // Navigate ke route yang sesuai (tergantung jenis tombol)
           if (item.name == "Create Product") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const ItemListFormPage()),
+              MaterialPageRoute(
+                builder: (_) => const ItemListFormPage(),
+              ),
             );
-          }
-
-          else if (item.name == "All Products") {
+          } else if (item.name == "All Products") {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const ItemEntryListPage()
+                builder: (_) => const ItemEntryListPage(),
               ),
             );
-          }
+          } else if (item.name == "My Products") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const MyItemEntryListPage(),
+              ),
+            );
+          } else if (item.name == "Logout") {
+            final response =
+            await request.logout("http://localhost:8000/auth/logout/");
 
-          else if (item.name == "Logout") {
-            // TODO: Replace the URL with your app's URL and don't forget to add a trailing slash (/)!
-            // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
-            // If you using chrome,  use URL http://localhost:8000
-
-            final response = await request.logout(
-                "http://localhost:8000/auth/logout/");
             String message = response["message"];
             if (context.mounted) {
-              if (response['status']) {
+              if (response["status"]) {
                 String uname = response["username"];
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("$message See you again, $uname."),
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("$message See you again, $uname."),
+                  ),
+                );
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -106,5 +115,7 @@ class ItemCard extends StatelessWidget {
         ),
       ),
     );
+
+
   }
 }
